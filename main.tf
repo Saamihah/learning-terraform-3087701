@@ -75,14 +75,9 @@ module "alb" {
       port     = 80
       protocol = "HTTP"
     }
-    
-      forward = {
-        target_group_key = "ex-instance"
-      }
-    }
   }
-
 }
+
 module "blog_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.2.0"
