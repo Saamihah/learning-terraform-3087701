@@ -70,19 +70,19 @@ module "alb" {
     }
   ]
 
-  http_tcp_listeners = [
-    {
+  listeners = {
+    ex-http-listener = {
       port     = 80
       protocol = "HTTP"
-      target_group_index = 0
+    }
+    
+      forward = {
+        target_group_key = "ex-instance"
       }
-  ]
-
-  tags = {
-    Environment = "dev"
+    }
   }
-}
 
+}
 module "blog_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.2.0"
