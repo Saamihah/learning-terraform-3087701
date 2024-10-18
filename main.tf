@@ -47,7 +47,7 @@ resource "aws_security_group_rule" "blog_http_in" {}
 }
 
 resource "aws_security_group_rule" "blog_http_in" {}
-  type        = "egress"
+  type        = "ingress"
   from_port   = 443
   to_port     = 443
   protocol    = "tcp"
@@ -57,10 +57,10 @@ resource "aws_security_group_rule" "blog_http_in" {}
 }
 
 resource "aws_security_group_rule" "blog_everything_out" {}
-  type        = "ingress"
-  from_port   = 80
-  to_port     = 80
-  protocol    = "tcp"
+  type        = "egress"
+  from_port   = 0
+  to_port     = 0
+  protocol    = "-1"
   cidr_blocks = [0.0.0.0/0]
 
   security_group_id = "aws_security_group.blog.id"
