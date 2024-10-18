@@ -62,7 +62,7 @@ module "alb" {
     }
 
       forward = {
-        target_group_key = "ex-instance""
+        target_group_key = "ex-instance"
       }
     }
 
