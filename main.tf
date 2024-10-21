@@ -50,8 +50,8 @@ module "alb" {
   source = "terraform-aws-modules/alb/aws"
 
   name    = "blog-alb"
-  vpc_id  = "vpc-abcde012"
-  subnets = module.blog_vpc.vpc_id
+  vpc_id  = module.blog_vpc.vpc_id
+  subnets = [module.blog_vpc.vpc_id]
 
   security_group_ingress_rules = {
     all_http = {
@@ -71,7 +71,7 @@ module "alb" {
   }
   security_group_egress_rules = {
     all = {
-      ip_protocol = "-1"
+      ip_protocol = "all-all"
       cidr_ipv4   = "10.0.0.0/0"
     }
   }
@@ -95,42 +95,6 @@ module "alb" {
         target_group_key = "ex-instance"
       }
   }
-
-  tags = {
-    Environment = "dev"
-  }
-}
-
-module "alb" {
-  source = "terraform-aws-modules/alb/aws"
-
-  name            = "blog-alb"
-  vpc_id          = module.blog_vpc.vpc_id
-  subnets         = module.blog_vpc.public_subnets
-  security_groups = [module.blog_sg.security_group_id]
-
-
-  listeners = {
-    ex-http = {
-      port     = 80
-      protocol = "HTTP"
-    }
-
-      forward = {
-        target_group_key = "ex-instance"
-      }
-    }
-
-  target_groups = {
-    ex-instance = {
-      name_prefix      = "blog"
-      protocol         = "HTTP"
-      port             = 80
-      target_type      = "instance"
-      target_id        = aws_instance.blog.id
-    }
-  }
-
 
   tags = {
     Environment = "dev"
