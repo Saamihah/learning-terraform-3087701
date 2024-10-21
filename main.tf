@@ -55,18 +55,16 @@ module "alb" {
 
   security_groups = [module.blog_sg.security_group_id]
 
-  listeners = [
-    {
-      port     = 80
-      protocol = "HTTP"
-    }
-    
+listeners = [
+  {
+    port     = 80
+    protocol = "HTTP"
     default_action = {
-        type             = "forward"
-        target_group_key = "ex-instance"
-      }
+      type             = "forward"
+      target_group_key = "ex-instance"
     }
-  ]
+  }
+]
 
   target_groups = {
     ex-instance = {
