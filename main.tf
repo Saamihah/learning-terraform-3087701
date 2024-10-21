@@ -68,7 +68,6 @@ module "blog_alb" {
       forward = {
         target_group_key = "ex-instance"
       }
-    }
   }
 
   target_groups = {
