@@ -51,30 +51,10 @@ module "alb" {
 
   name    = "blog-alb"
   vpc_id  = module.blog_vpc.vpc_id
-  subnets = [module.blog_vpc.vpc_id]
+  subnets = module.blog_vpc.vpc_id
 
-  security_group_ingress_rules = {
-    all_http = {
-      from_port   = 80
-      to_port     = 80
-      ip_protocol = "tcp"
-      description = "HTTP web traffic"
-      cidr_ipv4   = "0.0.0.0/0"
-    }
-    all_https = {
-      from_port   = 443
-      to_port     = 443
-      ip_protocol = "tcp"
-      description = "HTTPS web traffic"
-      cidr_ipv4   = "0.0.0.0/0"
-    }
-  }
-  security_group_egress_rules = {
-    all = {
-      ip_protocol = "all-all"
-      cidr_ipv4   = "10.0.0.0/0"
-    }
-  }
+  security_groups = [module.blog_sg.security_group_id]
+
   target_groups = {
     ex-instance = {
       name_prefix      = "blog"
@@ -85,11 +65,17 @@ module "alb" {
     }
   }
 
-  listeners = {
-    ex-http = {
+  listeners = [
+    {
       port     = 80
       protocol = "HTTP"
+      default_action = {
+        type             = "forward"
+        target_group_arn = module.alb.target_group_arn["ex-instance"]
+      }
     }
+  ]
+
 
       forward = {
         target_group_key = "ex-instance"
