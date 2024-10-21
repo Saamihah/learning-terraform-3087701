@@ -71,7 +71,7 @@ module "alb" {
       protocol = "HTTP"
       default_action = {
         type             = "forward"
-        target_group_key = "ex-instance"
+        target_group_index = 0
       }
     }
   ]
