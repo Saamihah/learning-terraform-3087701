@@ -54,22 +54,16 @@ module "blog_alb" {
   subnets = module.blog_vpc.public_subnets
   security_groups = [module.blog_sg.security_group_id]  
 
-  listeners = {
-    ex-http-https-redirect = {
-      port     = 80
-      protocol = "HTTP"
-      redirect = {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
-      }
+  listeners = [
+  {
+    port     = 80
+    protocol = "HTTP"
+    default_action = {
+      type             = "forward"
+      target_group_key = "ex-instance" 
     }
-
-      forward = {
-        target_group_key = "ex-instance"
-      }
   }
-
+]
   target_groups = {
     ex-instance = {
       name_prefix      = "blog"
@@ -85,6 +79,8 @@ module "blog_alb" {
    
   }
 }
+
+
 module "blog_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.2.0"
