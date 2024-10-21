@@ -76,12 +76,6 @@ module "alb" {
     }
   ]
 
-
-      forward = {
-        target_group_key = "ex-instance"
-      }
-  }
-
   tags = {
     Environment = "dev"
   }
